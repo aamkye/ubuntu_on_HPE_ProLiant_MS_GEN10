@@ -6,3 +6,6 @@
   loop:
     - tree
     - httpie
+    - smartmontools
+    - git
+    - net-tools

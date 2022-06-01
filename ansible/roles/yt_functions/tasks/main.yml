@@ -4,18 +4,21 @@
     name: '{{ item }}'
     state: latest
   loop:
+    - git
     - parallel
     - jq
+    - ffmpeg
 
 - name: Install bottle into the specified (virtualenv), inheriting globally installed modules
   ansible.builtin.pip:
     name: "{{ item  }}"
     executable: "~/.pyenv/shims/pip"
   loop:
-    - youtube-dl
+    # - youtube-dl
+    - yt-dlp
 
 - name: Clone amadeuszkryze/yt-functions
-  become: true
+  # become: true
   ansible.builtin.git:
     repo: https://github.com/amadeuszkryze/yt-functions/
     dest: /opt/yt-functions

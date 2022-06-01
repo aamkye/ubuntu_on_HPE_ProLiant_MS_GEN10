@@ -5,9 +5,9 @@
     - vars/main.yml
     - vars/packer.yml
     - vars/zfs.yml
+    - vars/pyenv.yml
   roles:
-    - { role: localhost_dns, when: (custom_dns | default(false) | bool) == true}
-    - { role: hardware_control }
-    - { role: internal_memory }
-    - { role: user }
+    - { role: apps }
+    - { role: pyenv }
+    - { role: lvm }
     - { role: docker }

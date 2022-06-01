@@ -5,10 +5,10 @@ zfs_pools:
     state: present
     mode: raidz2
     devices:
-      - /dev/sda
       - /dev/sdb
       - /dev/sdc
       - /dev/sdd
+      - /dev/sde
     options:
       - "autoexpand=on"
       - "autoreplace=on"

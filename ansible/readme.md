@@ -180,7 +180,9 @@ zfs change-key \
 * resizepart 3
 * <input size> (eg `100%`)
 * quit
-* pvresize /dev/sde3
+* pvresize /dev/sda3
+* lvresize -l +100%FREE $(sudo lvdisplay -c | awk -F':' '{print $1}' | tr -d ' ')
+* resize2fs $(sudo lvdisplay -c | awk -F':' '{print $1}' | tr -d ' ')
 * lvextend -r -l100%free /dev/mapper/ubuntu--vg-ubuntu--lv
 ```
 

@@ -45,3 +45,5 @@
     eval "$(pyenv init --path)"
     pyenv install {{ pyenv_python_version }}
     pyenv global {{ pyenv_python_version }}
+  args:
+    executable: /bin/bash
