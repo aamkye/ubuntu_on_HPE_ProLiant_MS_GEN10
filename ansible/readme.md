@@ -4,16 +4,7 @@
 
 * [Ansible](#ansible)
   * [TOC](#toc)
-  * [Pre-requirements](#pre-requirements)
-  * [Image building](#image-building)
-  * [Image burn](#image-burn)
-  * [NAS Part](#nas-part)
-  * [Ansible part](#ansible-part)
-  * [Helpful stuff](#helpful-stuff)
-    * [Aliases](#aliases)
-    * [Manually converting qcow2 to img](#manually-converting-qcow2-to-img)
-    * [Existing ZFS pool](#existing-zfs-pool)
-    * [Debug](#debug)
+  * TBD
 
 ## Pre-requirements
 
@@ -41,23 +32,43 @@ ansible-playbook autoinstall-generator.yml
 
 Then take `./tmp/user-data` file and place it on http(s) server.
 
-## NAS Part
+## Get ISO
 
-While booting up edit bootloader settings from:
+Download chosen iso from [here](https://ubuntu.com/download/server).
+
+## BIOS part
+
+Boot into BIOS and turn off `BIOS_CHECK_NAME` (raid thing).
+
+## Pendrive part
+
+Make bootable usb and boot.
+
+## Boot part (with pendrive)
+
+While booting up, press `e` key to edit grub settings from:
 
 ```bash
-CODE
+setparams ' Try or Install Ubuntu Server'
+
+set gfxpayload=keep
+linux /casper/vmlinuz ---
+initrd /casper/initrd
 ```
 
 and append some changes:
 
 ```bash
-CODE
+setparams ' Try or Install Ubuntu Server'
+
+set gfxpayload=keep
+linux /casper/vmlinuz --- autoinstall ds=nocloud-net\;s=http://<ip>:<port>/<location-of-user-data-folder>
+initrd /casper/initrd
 ```
 
-Hit F10 and then auto install should start.
+Hit `F10` and then auto install should start.
 
-## Ansible part
+## Ansible part (optional)
 
 Just run:
 
@@ -67,93 +78,9 @@ ansible-playbook all_in_one.yml --ask-become-pass -e "target=10.0.0.101 custom_d
 
 And watch the magic.
 
-After its done, it is done :)
+After it's done, it's done :)
 
-## Helpful stuff
+## Extras
 
-### Aliases
-
-```bash
-# Alias for loading password and mounting
-function zload() {
-  sudo zfs load-key -L prompt $1 && sudo zfs mount $1
-}
-
-# Alias for unloading password and unmounting
-function zunload() {
-  sudo zfs unmount -f $1 && sudo zfs unload-key $1
-}
-
-# Wipes whole zfs datasets and pools
-zfs destroy -r nas
-```
-
-### Existing ZFS pool
-
-It may happen that You already have old ZFS pool:
-
-```bash
-TASK [zfs : Create ZFS pool] ***************************************************
-fatal: [0.0.0.0]: FAILED! => changed=true
-  cmd: zpool create -o autoexpand=on -o autoreplace=on -o delegation=on -o dedupditto=1.5 -o failmode=continue -o listsnaps=on nas raidz2 /dev/sda /dev/sdb /dev/sdc /dev/sdd
-  msg: non-zero return code
-  rc: 1
-  stderr: |-
-    invalid vdev specification
-    use '-f' to override the following errors:
-    /dev/sda1 is part of potentially active pool 'nas'
-    /dev/sdb1 is part of potentially active pool 'nas'
-    /dev/sdc1 is part of potentially active pool 'nas'
-    /dev/sdd1 is part of potentially active pool 'nas'
-  stderr_lines: <omitted>
-  stdout: ''
-  stdout_lines: <omitted>
-```
-
-In that situation just type:
-
-```bash
-$ sudo zpool import
-   pool: nas
-     id: 0000000000000000000
-  state: ONLINE
-status: The pool was last accessed by another system.
- action: The pool can be imported using its name or numeric identifier and
-        the '-f' flag.
-   see: https://openzfs.github.io/openzfs-docs/msg/ZFS-8000-EY
- config:
-
-        nas         ONLINE
-          raidz2-0  ONLINE
-            sda     ONLINE
-            sdb     ONLINE
-            sdc     ONLINE
-            sdd     ONLINE
-$ sudo zpool import -f 0000000000000000000
-$ zload nas/data
-```
-
-### Changing password for zfs dataset
-
-_Existing keys has to be loaded._
-
-```bash
-zfs change-key \
-  -o keylocation=prompt \
-  -o keyformat=passphrase \
-  nas/data
-```
-
-### Changing LVM size
-
-```
-* parted /dev/sde
-* print (fix if needed)
-* resizepart 3
-* <input size> (eg `100%`)
-* quit
-* pvresize /dev/sda3
-* lvresize -l +100%FREE $(sudo lvdisplay -c | awk -F':' '{print $1}' | tr -d ' ')
-* resize2fs $(sudo lvdisplay -c | awk -F':' '{print $1}' | tr -d ' ')
-* lvextend -r -l100%free /dev/mapper/ubuntu--vg-ubuntu--lv
-```
+* [ZFS](./readme/zfs.md)
+* [LVM](./readme/lvm.md)
