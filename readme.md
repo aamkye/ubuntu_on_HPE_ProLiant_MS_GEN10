@@ -2,7 +2,7 @@
 
 _Disclaimer: do this at your own risk. No fancy web gui here, just raw unix power._
 
-[![WD PR4100](./img/microservergen10.jpeg)](./img/microservergen10.jpeg)
+[![HPE ProLiant MicroServer Gen10](./img/microservergen10.jpeg)](./img/microservergen10.jpeg)
 
 ## TOC
 
@@ -42,6 +42,14 @@ There is [ansible](./ansible) folder with automatization of most steps and more.
 * LAN: 2 x 1 Gbit/s Ethernet
 ```
 
+## Suggested addon:
+
+HPE 870212-B21 - SSD converter kit:
+
+[![HPE 870212-B21](./img/hpe-870212-B21.jpg)](./img/hpe-870212-B21.jpg)
+
+* https://buy.hpe.com/us/en/options/cables-cable-kits/server-enablement-kits/server-enablement-kits/hpe-enablement-kits/hpe-microserver-gen10-sff-nhp-sata-converter-kit/p/870213-B21
+
 ---
 
 ## Links:
@@ -60,7 +68,7 @@ There is [ansible](./ansible) folder with automatization of most steps and more.
 
 ## Main process
 
-Please follow readme in [./ansible](./ansible/readme.md) folder.
+Please follow readme in [./ansible](./ansible/) folder.
 
 ---
 
