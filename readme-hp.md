@@ -1,5 +1,5 @@
 
-TURNOFF BIOS
+TURNOFF BIOS FLAG
 
 ```bash
 > lsblk

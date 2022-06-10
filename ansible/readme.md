@@ -18,7 +18,7 @@
 ## Pre-requirements
 
 Browse `vars/` folder and do necessary changes like:
-  * `packer`:
+  * `main`:
     * `macaddress`
     * `authorized_keys`
     * `hostname`
@@ -33,51 +33,29 @@ as well as:
   * `ansible.cfg`:
     * `remote_user`
 
-## Image building
+## Config generation
 
 ```bash
-ansible-playbook packer.yml --ask-become-pass
+ansible-playbook autoinstall-generator.yml
 ```
 
-then wait 30-40min and image should create itself via packer in `ansible/tmp/output`
-
-## Image burn
-
-To burn image to `/dev/disk5` (`disk5` used as example), type:
-
-```bash
-cd tmp/output
-
-sudo su
-
-#as sudo
-pv -tpreb nas-ubuntu-server.img | dd of=/dev/disk5 bs=4096 conv=notrunc,noerror
-```
+Then take `./tmp/user-data` file and place it on http(s) server.
 
 ## NAS Part
 
-Unplug USB from PC and plug into NAS (no matter which USB port).
-
-Now You need to localize NAS IP, run the same `nmap`:
-
-_NAS `bond0` interface should have `00:00:00:00:00:01` macaddress._
+While booting up edit bootloader settings from:
 
 ```bash
-nmap -p 22 10.0.0.0/24
-
-(...)
-Nmap scan report for 10.0.0.101
-Host is up (0.012s latency).
-
-PORT   STATE SERVICE
-22/tcp open  ssh
-MAC Address: 00:00:00:00:00:01 (Xerox)
-(...)
+CODE
 ```
 
-If You can ssh to NAS - go to Ansible part.
+and append some changes:
 
-If not - debug time.
+```bash
+CODE
+```
+
+Hit F10 and then auto install should start.
 
 ## Ansible part
 
@@ -108,12 +86,6 @@ function zunload() {
 
 # Wipes whole zfs datasets and pools
 zfs destroy -r nas
-```
-
-### Manually converting qcow2 to img
-
-```bash
-qemu-img convert nas-ubuntu-server.qcow2 -O raw nas-ubuntu-server.img
 ```
 
 ### Existing ZFS pool
@@ -185,15 +157,3 @@ zfs change-key \
 * resize2fs $(sudo lvdisplay -c | awk -F':' '{print $1}' | tr -d ' ')
 * lvextend -r -l100%free /dev/mapper/ubuntu--vg-ubuntu--lv
 ```
-
-### Debug
-
-While You cannot connect to NAS, unplug USB from it, and plug back to PC. Go to tmp folder (BIOS is there), and run command (replace `disk5` with whatever suits your case):
-
-```bash
-sudo kvm -bios ./bios.bin -L . -drive format=raw,file=/dev/disk5 -m 4G
-```
-
-Log into system, and dive into logs.
-
-And that's it.

@@ -3,11 +3,10 @@
   vars_files:
     - vars/docker.yml
     - vars/main.yml
-    - vars/packer.yml
     - vars/zfs.yml
-    - vars/pyenv.yml
   roles:
     - { role: apps }
     - { role: pyenv }
     - { role: lvm }
     - { role: docker }
+    - { role: unattended-upgrades }

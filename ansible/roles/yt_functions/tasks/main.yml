@@ -14,7 +14,7 @@
     name: "{{ item  }}"
     executable: "~/.pyenv/shims/pip"
   loop:
-    # - youtube-dl
+    - youtube-dl
     - yt-dlp
 
 - name: Clone amadeuszkryze/yt-functions

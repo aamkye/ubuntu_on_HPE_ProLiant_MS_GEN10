@@ -1,7 +1,6 @@
-- name: Setup docker
+- name: Setup unattended-upgrades
   hosts: "{{ target | default('None') }}"
   vars_files:
     - vars/main.yml
-    - vars/docker.yml
   roles:
-    - { role: docker }
+    - { role: unattended-upgrades }

@@ -1,0 +1,9 @@
+- name: "Prepare {{ tmp_dir }} folder"
+  ansible.builtin.file:
+    state: directory
+    path: "{{ tmp_dir }}"
+
+- name: "Prepare user-data"
+  ansible.builtin.template:
+    src: user-data.j2
+    dest: "{{ tmp_dir }}/user-data"

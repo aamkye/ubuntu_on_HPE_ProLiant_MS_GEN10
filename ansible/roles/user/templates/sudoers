@@ -1,2 +1,0 @@
-# User rules for {{ username }}
-{{ username }} ALL=(ALL) NOPASSWD:ALL

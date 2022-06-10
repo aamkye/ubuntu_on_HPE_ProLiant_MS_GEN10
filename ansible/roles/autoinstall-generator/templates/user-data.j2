@@ -15,19 +15,16 @@ autoinstall:
       version: 2
       renderer: networkd
       ethernets:
-        <interface_name_1>:
+        {% for i in macaddress -%}
+        {{ i['interface'] }}:
           match:
-            macaddress: {{ macaddress[0] }}
+            macaddress: {{ i['mac'] }}
           dhcp4: false
-          set-name: <interface_name_1>
-        <interface_name_2>:
-          match:
-            macaddress: {{ macaddress[1] }}
-          dhcp4: false
-          set-name: <interface_name_2>
+          set-name: {{ i['interface'] }}
+        {% endfor -%}
       bonds:
         bond0:
-          interfaces: [<interface_name_1>, <interface_name_2>]
+          interfaces: {{ macaddress | map(attribute='interface') | from_yaml }}
           macaddress: {{ bond_macaddress }}
           dhcp4: true
           dhcp-identifier: mac
@@ -44,7 +41,7 @@ autoinstall:
   identity:
     hostname: {{ hostname }}
     username: {{ username }}
-    password: {{ password | password_hash('sha256') }}
+    password: {{ '%s' | format(password) | password_hash('sha256') }}
   ssh:
     install-server: true
     authorized-keys: {{ authorized_keys | from_yaml }}
