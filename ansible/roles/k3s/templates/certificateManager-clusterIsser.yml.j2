@@ -1,6 +1,16 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: letsencrypt-route53-credentials
+  namespace: cert-manager
+type: Opaque
+data:
+  secret: {{ acme_secret_access_key | string | b64encode }}
+
+---
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt-staging
 spec:
@@ -18,12 +28,12 @@ spec:
             region: eu-central-1
             accessKeyID: {{ acme_access_key_id }}
             secretAccessKeySecretRef:
-              name: letsencrypt-staging-route53-credentials-secret
-              key: {{ acme_secret_access_key }}
+              name: letsencrypt-route53-credentials
+              key: secret
 
 ---
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
 spec:
@@ -41,5 +51,5 @@ spec:
             region: eu-central-1
             accessKeyID: {{ acme_access_key_id }}
             secretAccessKeySecretRef:
-              name: letsencrypt-prod-route53-credentials-secret
-              key: {{ acme_secret_access_key }}
+              name: letsencrypt-route53-credentials
+              key: secret
