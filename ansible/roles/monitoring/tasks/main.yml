@@ -1,0 +1,22 @@
+- name: Template grafana.yml
+  ansible.builtin.template:
+    src: grafana.yml.j2
+    dest: /opt/monitoring/grafana.yml
+
+- name: Create directory
+  file:
+    path: /opt/monitoring/
+    state: directory
+    recurse: yes
+
+- name: Template grafana.yml
+  ansible.builtin.template:
+    src: grafana.yml.j2
+    dest: /opt/monitoring/grafana.yml
+
+- name: Deploy grafana.yml
+  become: true
+  shell: |
+    kubectl apply -f ./grafana.yml
+  args:
+    chdir: /opt/monitoring/

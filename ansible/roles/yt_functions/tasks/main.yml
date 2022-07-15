@@ -17,9 +17,9 @@
     - youtube-dl
     - yt-dlp
 
-- name: Clone amadeuszkryze/yt-functions
+- name: Clone aamkye/yt-functions
   # become: true
   ansible.builtin.git:
-    repo: https://github.com/amadeuszkryze/yt-functions/
+    repo: https://github.com/aamkye/yt-functions/
     dest: /opt/yt-functions
     version: master

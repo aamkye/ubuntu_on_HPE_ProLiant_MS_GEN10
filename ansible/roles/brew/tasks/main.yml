@@ -1,0 +1,21 @@
+- name: Install preRequirements
+  become: true
+  package:
+    name:
+      - build-essential
+      - procps
+      - curl
+      - file
+      - git
+    state: latest
+
+- name: Install brew
+  shell: |
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+- name: Add paths and evals
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    marker: "# brew {mark} ANSIBLE MANAGED BLOCK"
+    block: |
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

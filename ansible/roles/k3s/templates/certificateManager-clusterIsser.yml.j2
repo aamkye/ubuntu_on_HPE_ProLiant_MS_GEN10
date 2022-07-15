@@ -1,0 +1,45 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    email: {{ acme_email }}
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    solvers:
+      - selector:
+          dnsZones:
+            - "dc0.ak95.io"
+        dns01:
+          route53:
+            region: eu-central-1
+            accessKeyID: {{ acme_access_key_id }}
+            secretAccessKeySecretRef:
+              name: letsencrypt-staging-route53-credentials-secret
+              key: {{ acme_secret_access_key }}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: {{ acme_email }}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      - selector:
+          dnsZones:
+            - "dc0.ak95.io"
+        dns01:
+          route53:
+            region: eu-central-1
+            accessKeyID: {{ acme_access_key_id }}
+            secretAccessKeySecretRef:
+              name: letsencrypt-prod-route53-credentials-secret
+              key: {{ acme_secret_access_key }}

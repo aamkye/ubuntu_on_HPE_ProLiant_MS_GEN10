@@ -1,7 +1,8 @@
 - name: Configure unattended-upgrades
   become: true
   ansible.builtin.blockinfile:
-    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    path: /etc/apt/apt.conf.d/51ansible-unattended-upgrades
+    create: true
     block: |
       Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
@@ -12,10 +13,15 @@
       };
       Unattended-Upgrade::Package-Blacklist {}
 
+      Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+      Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
+
 - name: Enable unattended-upgrades
   become: true
   ansible.builtin.blockinfile:
-    path: /etc/apt/apt.conf.d/20auto-upgrades
+    path: /etc/apt/apt.conf.d/21ansible-auto-upgrades
+    create: true
     block: |
       APT::Periodic::Update-Package-Lists "1";
       APT::Periodic::Download-Upgradeable-Packages "1";
