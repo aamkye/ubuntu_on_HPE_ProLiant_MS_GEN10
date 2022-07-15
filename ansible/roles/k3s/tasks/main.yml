@@ -1,13 +1,13 @@
-# - name: Install software
-#   community.general.homebrew:
-#     path: /home/linuxbrew/.linuxbrew/bin/
-#     name:
-#       - go
-#       - k9s
-#       - helm
-#       - kubernetes-cli
-#       - kubectx
-#     state: present
+- name: Install software
+  community.general.homebrew:
+    path: /home/linuxbrew/.linuxbrew/bin/
+    name:
+      - go
+      - k9s
+      - helm
+      - kubernetes-cli
+      - kubectx
+    state: present
 
 - name: Install and modify k3s
   shell: |
@@ -25,6 +25,7 @@
     rm -rf cmctl.tar.gz
     kubectl apply --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/$(curl --silent "https://api.github.com/repos/cert-manager/cert-manager/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/')/cert-manager.yaml
 
+# TO BE REENABLED
 # - name: Install Haproxy-ingress
 #   shell: |
 #     /home/linuxbrew/.linuxbrew/bin/helm repo add haproxy-ingress https://haproxy-ingress.github.io/charts
@@ -41,19 +42,18 @@
     state: directory
     recurse: yes
 
-# WAIT FOR CMCTL
-
 - name: Template certificateManager-clusterIsser.yml
   ansible.builtin.template:
     src: certificateManager-clusterIsser.yml.j2
     dest: /opt/monitoring/certificateManager-clusterIsser.yml
 
+# WAIT FOR CMCTL
 - name: Deploy certificateManager-clusterIsser.yml
   become: true
-  # retries: 10
-  # delay: 20
-  # register: result
-  # until: result is succeeded
+  retries: 24
+  delay: 5
+  register: result
+  until: result is succeeded
   shell: |
     kubectl apply -f ./certificateManager-clusterIsser.yml
   args:

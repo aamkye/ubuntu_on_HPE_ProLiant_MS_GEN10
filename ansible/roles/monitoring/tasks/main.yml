@@ -1,8 +1,3 @@
-- name: Template grafana.yml
-  ansible.builtin.template:
-    src: grafana.yml.j2
-    dest: /opt/monitoring/grafana.yml
-
 - name: Create directory
   file:
     path: /opt/monitoring/
