@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deployment
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prometheus/prometheus:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              value: admin
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: admin
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - protocol: TCP
+      port: 8080
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging # letsencrypt-staging / letsencrypt-prod
+  name: prometheus-dc0-ak95-io-ingress
+spec:
+  rules:
+    - host: prometheus.dc0.ak95.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-service
+                port:
+                  number: 8080
+  tls:
+    - secretName: prometheus-dc0-ak95-io-cert
+      hosts:
+        - prometheus.dc0.ak95.io

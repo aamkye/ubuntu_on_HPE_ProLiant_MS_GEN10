@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cert-manager-ingress
+  namespace: cert-manager
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging # letsencrypt-staging / letsencrypt-prod
+spec:
+  rules:
+    - host: cert-manager.dc0.ak95.io
+      http:
+        paths:
+          - path: /metrics
+            pathType: Exact
+            backend:
+              service:
+                name: cert-manager
+                port:
+                  number: 9402
+
+  tls:
+    - secretName: cert-manager-dc0-ak95-io-cert
+      hosts:
+        - cert-manager.dc0.ak95.io

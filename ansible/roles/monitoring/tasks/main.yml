@@ -1,17 +1,4 @@
-- name: Create directory
-  file:
-    path: /opt/monitoring/
-    state: directory
-    recurse: yes
-
-- name: Template grafana.yml
-  ansible.builtin.template:
-    src: grafana.yml.j2
-    dest: /opt/monitoring/grafana.yml
-
-- name: Deploy grafana.yml
-  become: true
-  shell: |
-    kubectl apply -f ./grafana.yml
-  args:
-    chdir: /opt/monitoring/
+- include_tasks: 00-prerequirements.yml
+- include_tasks: 01-grafana.yml
+- include_tasks: 02-prometheus.yml
+- include_tasks: 03-grafana-post.yml

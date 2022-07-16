@@ -1,0 +1,35 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn-ingress
+  namespace: longhorn-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging # letsencrypt-staging / letsencrypt-prod
+spec:
+  rules:
+    - host: longhorn.dc0.ak95.io
+      http:
+        paths:
+          - path: /metrics
+            pathType: Exact
+            backend:
+              service:
+                name: longhorn-backend
+                port:
+                  number: 9500
+    - host: longhorn.dc0.ak95.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: longhorn-frontend
+                port:
+                  number: 80
+
+  tls:
+    - secretName: longhorn-dc0-ak95-io-cert
+      hosts:
+        - longhorn.dc0.ak95.io
