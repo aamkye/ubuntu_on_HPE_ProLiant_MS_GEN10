@@ -73,15 +73,16 @@ spec:
               value: "false"
             - name: GF_AUTH_ANONYMOUS_ENABLED
               value: "false"
-            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
-              value: Admin
+            - name: GF_INSTALL_PLUGINS
+              value: grafana-piechart-panel
+            - name: GF_SERVER_DOMAIN
+              value: grafana.dc0.ak95.io
+            - name: GF_SERVER_ENABLE_GZIP
+              value: "true"
           resources:
             limits:
               memory: "1Gi"
               cpu: "1000m"
-            # requests:
-            #   memory: 500M
-            #   cpu: "500m"
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: grafana-storage
