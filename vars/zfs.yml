@@ -24,7 +24,13 @@ zfs_datasets:
       - "encryption=aes-256-gcm"
       - "keyformat=passphrase"
       - "keylocation=file:///tmp/key.txt"
-  - name: nas/timemachine
+  - name: nas/music
+    state: present
+    options: []
+  - name: nas/torrend
+    state: present
+    options: []
+  - name: nas/video
     state: present
     options: []
 

@@ -4,12 +4,6 @@ _Disclaimer: do this at your own risk. No fancy web gui here, just raw unix powe
 
 [![HPE ProLiant MicroServer Gen10](./img/microservergen10.jpeg)](./img/microservergen10.jpeg)
 
-## TOC
-
-* [Setting up Ubuntu Server on HPE ProLiant MicroServer Gen10](#setting-up-ubuntu-server-on-hpe-pro-liant-micro-server-gen10)
-  * [TOC](#toc)
-  * TBD
-
 ---
 
 ## Original [project](https://github.com/aamkye/ubuntu_on_WD_PRx100)..
@@ -26,7 +20,7 @@ It goes from preparation, downloading required packages, running installation, i
 
 ## Ansible (automated way)
 
-There is [ansible](./ansible) folder with automatization of most steps and more.
+There is ansible automatization of most steps and more.
 
 ---
 
@@ -68,11 +62,4 @@ HPE 870212-B21 - SSD converter kit:
 
 ## Main process
 
-Please follow readme in [./ansible](./ansible/) folder.
-
----
-
-## Remarks
-
-* TOC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc).
-* Linted by [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
+Please follow [readme/ansible.md](readme/ansible.md) readme.

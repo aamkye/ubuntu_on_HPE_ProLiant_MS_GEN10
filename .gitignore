@@ -1,1 +1,3 @@
 .vscode
+ansible-retry
+tmp_dir

@@ -1,11 +1,4 @@
 # Ansible
-
-## TOC
-
-* [Ansible](#ansible)
-  * [TOC](#toc)
-  * TBD
-
 ## Pre-requirements
 
 Browse `vars/` folder and do necessary changes like:
@@ -82,5 +75,6 @@ After it's done, it's done :)
 
 ## Extras
 
-* [ZFS](./readme/zfs.md)
-* [LVM](./readme/lvm.md)
+* [ZFS](./zfs.md)
+* [LVM](./lvm.md)
+* [HPE](./hpe.md)
