@@ -1,0 +1,28 @@
+---
+- name: Prepare Longhorn values.yml
+  ansible.builtin.copy:
+    src: longhorn-values.yml
+    dest: /opt/monitoring/longhorn-values.yml
+
+- name: Install Longhorn
+  shell: |
+    /home/linuxbrew/.linuxbrew/bin/helm repo add longhorn https://charts.longhorn.io
+    /home/linuxbrew/.linuxbrew/bin/helm repo update
+    /home/linuxbrew/.linuxbrew/bin/helm upgrade --install longhorn longhorn/longhorn \
+      --namespace longhorn-system \
+      --create-namespace \
+      --values longhorn-values.yml
+  args:
+    chdir: /opt/monitoring/
+
+- name: Template longhorn-ingress.yml
+  ansible.builtin.template:
+    src: longhorn-ingress.yml.j2
+    dest: /opt/monitoring/longhorn-ingress.yml
+
+- name: Deploy longhorn-ingress.yml
+  become: true
+  shell: |
+    kubectl apply -f ./longhorn-ingress.yml
+  args:
+    chdir: /opt/monitoring/

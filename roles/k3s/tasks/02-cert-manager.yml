@@ -1,0 +1,54 @@
+---
+- name: Prepare cert-manager values.yml
+  ansible.builtin.copy:
+    src: cert-manager-values.yml
+    dest: /opt/monitoring/cert-manager-values.yml
+
+- name: Install cmctl
+  shell: |
+    curl -sSL -o cmctl.tar.gz https://github.com/cert-manager/cert-manager/releases/download/$(curl --silent "https://api.github.com/repos/cert-manager/cert-manager/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/')/cmctl-linux-amd64.tar.gz
+    tar -xf cmctl.tar.gz
+    sudo mv cmctl /usr/local/bin
+    rm -rf cmctl.tar.gz
+    # kubectl apply --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/$(curl --silent "https://api.github.com/repos/cert-manager/cert-manager/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/')/cert-manager.yaml
+
+- name: Install cert-manager.io
+  shell: |
+    /home/linuxbrew/.linuxbrew/bin/helm repo add jetstack https://charts.jetstack.io
+    /home/linuxbrew/.linuxbrew/bin/helm repo update
+    /home/linuxbrew/.linuxbrew/bin/helm upgrade --install cert-manager jetstack/cert-manager \
+      --namespace cert-manager \
+      --create-namespace \
+      --set installCRDs=true \
+      --values cert-manager-values.yml
+  args:
+    chdir: /opt/monitoring/
+
+- name: Template certManager-clusterIsser.yml
+  ansible.builtin.template:
+    src: certManager-clusterIsser.yml.j2
+    dest: /opt/monitoring/certManager-clusterIsser.yml
+
+# WAIT FOR CMCTL
+- name: Deploy certManager-clusterIsser.yml
+  become: true
+  retries: 24
+  delay: 5
+  register: result
+  until: result is succeeded
+  shell: |
+    kubectl apply -f ./certManager-clusterIsser.yml
+  args:
+    chdir: /opt/monitoring/
+
+- name: Template certManager-ingress.yml
+  ansible.builtin.template:
+    src: certManager-ingress.yml.j2
+    dest: /opt/monitoring/certManager-ingress.yml
+
+- name: Deploy certManager-ingress.yml
+  become: true
+  shell: |
+    kubectl apply -f ./certManager-ingress.yml
+  args:
+    chdir: /opt/monitoring/

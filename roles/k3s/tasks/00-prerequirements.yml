@@ -1,0 +1,17 @@
+---
+- name: Install software
+  community.general.homebrew:
+    path: /home/linuxbrew/.linuxbrew/bin/
+    name:
+      - go
+      - k9s
+      - helm
+      - kubernetes-cli
+      - kubectx
+    state: latest
+
+- name: Create directory
+  file:
+    path: /opt/monitoring/
+    state: directory
+    recurse: yes

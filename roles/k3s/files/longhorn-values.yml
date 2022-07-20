@@ -1,0 +1,10 @@
+persistence:
+  defaultClassReplicaCount: 1
+  defaultDataLocality: best-effort
+
+longhornManager:
+  serviceAnnotations: {
+    prometheus.io/scrape: 'true',
+    prometheus.io/port: '9500',
+    prometheus.io/path: '/metrics',
+  }

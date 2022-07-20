@@ -1,0 +1,30 @@
+---
+- name: Prepare certManager-service.patch.yml
+  ansible.builtin.copy:
+    src: certManager-service.patch.yml
+    dest: /opt/monitoring/certManager-service.patch.yml
+
+- name: Patch certManager-service.patch.yml
+  become: true
+  shell: |
+    kubectl patch \
+      service cert-manager \
+      --patch-file ./certManager-service.patch.yml \
+      --namespace cert-manager
+  args:
+    chdir: /opt/monitoring/
+
+- name: Prepare longhorn-service.patch.yml
+  ansible.builtin.copy:
+    src: longhorn-service.patch.yml
+    dest: /opt/monitoring/longhorn-service.patch.yml
+
+- name: Patch longhorn-service.patch.yml
+  become: true
+  shell: |
+    kubectl patch \
+      service longhorn-backend \
+      --patch-file ./longhorn-service.patch.yml \
+      --namespace longhorn-system
+  args:
+    chdir: /opt/monitoring/

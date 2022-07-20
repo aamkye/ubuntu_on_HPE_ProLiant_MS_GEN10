@@ -1,4 +1,4 @@
 - include_tasks: 00-prerequirements.yml
 - include_tasks: 01-grafana.yml
 - include_tasks: 02-prometheus.yml
-- include_tasks: 03-grafana-post.yml
+# - include_tasks: 03-scapers.yml

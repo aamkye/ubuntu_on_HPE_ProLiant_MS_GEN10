@@ -1,1 +1,19 @@
 ---
+- name: Template prometheus.yml
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /opt/monitoring/prometheus.yml
+
+- name: Deploy prometheus.yml
+  become: true
+  shell: |
+    kubectl apply -f ./prometheus.yml
+  args:
+    chdir: /opt/monitoring/
+
+- name: Reload prometheus configuration
+  uri:
+    url: "http://prometheus.dc0.ak95.io/-/reload"
+    method: POST
+    status_code: 200
+    validate_certs: false

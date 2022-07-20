@@ -19,21 +19,48 @@ metadata:
   name: grafana-datasources
   namespace: monitoring-system
 data:
-  prometheus.yaml: |-
-    {
-        "apiVersion": 1,
-        "datasources": [
-            {
-               "access":"proxy",
-                "editable": true,
-                "name": "prometheus",
-                "orgId": 1,
-                "type": "prometheus",
-                "url": "http://prometheus-service.monitoring-system.svc:8080",
-                "version": 1
-            }
-        ]
-    }
+  prometheus.yaml: |
+    apiVersion: 1
+    datasources:
+      - access: proxy
+        editable: true
+        name: prometheus-raw
+        orgId: 1
+        type: prometheus
+        url: http://prometheus-service.monitoring-system.svc:9090
+        version: 1
+      - access: proxy
+        editable: true
+        name: prometheus-trickster
+        orgId: 1
+        type: prometheus
+        url: http://trickster-service.monitoring-system.svc:9090
+        version: 1
+
+  # prometheus.yaml: |-
+  #   {
+  #       "apiVersion": 1,
+  #       "datasources": [
+  #           {
+  #              "access":"proxy",
+  #               "editable": true,
+  #               "name": "prometheus-raw",
+  #               "orgId": 1,
+  #               "type": "prometheus",
+  #               "url": "http://prometheus-service.monitoring-system.svc:9090",
+  #               "version": 1
+  #           },
+  #           {
+  #              "access":"proxy",
+  #               "editable": true,
+  #               "name": "prometheus-trickster",
+  #               "orgId": 1,
+  #               "type": "prometheus",
+  #               "url": "http://trickster-service.monitoring-system.svc:9090",
+  #               "version": 1
+  #           }
+  #       ]
+  #   }
 
 ---
 apiVersion: apps/v1
@@ -79,10 +106,12 @@ spec:
               value: grafana.dc0.ak95.io
             - name: GF_SERVER_ENABLE_GZIP
               value: "true"
-          resources:
-            limits:
-              memory: "1Gi"
-              cpu: "1000m"
+            - name: GF_USERS_ALLOW_SIGN_UP
+              value: "false"
+          # resources:
+          #   limits:
+          #     memory: "500Mi"
+          #     cpu: "200m"
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: grafana-storage
@@ -104,6 +133,10 @@ kind: Service
 metadata:
   name: grafana-service
   namespace: monitoring-system
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port:   '3000'
+    prometheus.io/path:   '/metrics'
 spec:
   selector:
     app: grafana
@@ -115,10 +148,11 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: grafana-dc0-ak95-io-ingress
+  name: grafana-ingress
   namespace: monitoring-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging # letsencrypt-staging / letsencrypt-prod
+    cert-manager.io/cluster-issuer: {% if prod_issuer | default("false") | bool %}letsencrypt-prod{% else %}letsencrypt-staging{% endif %}
+
 spec:
   rules:
     - host: grafana.dc0.ak95.io

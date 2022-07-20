@@ -1,3 +1,4 @@
+---
 - name: Template grafana.yml
   ansible.builtin.template:
     src: grafana.yml.j2

@@ -5,19 +5,10 @@ metadata:
   name: longhorn-ingress
   namespace: longhorn-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging # letsencrypt-staging / letsencrypt-prod
+    cert-manager.io/cluster-issuer: {% if prod_issuer | default("false") | bool %}letsencrypt-prod{% else %}letsencrypt-staging{% endif %}
+
 spec:
   rules:
-    - host: longhorn.dc0.ak95.io
-      http:
-        paths:
-          - path: /metrics
-            pathType: Exact
-            backend:
-              service:
-                name: longhorn-backend
-                port:
-                  number: 9500
     - host: longhorn.dc0.ak95.io
       http:
         paths:

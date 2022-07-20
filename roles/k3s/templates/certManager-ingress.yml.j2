@@ -5,7 +5,8 @@ metadata:
   name: cert-manager-ingress
   namespace: cert-manager
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging # letsencrypt-staging / letsencrypt-prod
+    cert-manager.io/cluster-issuer: {% if prod_issuer | default("false") | bool %}letsencrypt-prod{% else %}letsencrypt-staging{% endif %}
+
 spec:
   rules:
     - host: cert-manager.dc0.ak95.io

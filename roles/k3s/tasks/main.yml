@@ -1,27 +1,6 @@
-- name: Install software
-  community.general.homebrew:
-    path: /home/linuxbrew/.linuxbrew/bin/
-    name:
-      - go
-      - k9s
-      - helm
-      - kubernetes-cli
-      - kubectx
-    state: present
-
-- name: Create directory
-  file:
-    path: /opt/monitoring/
-    state: directory
-    recurse: yes
-
-- name: Install and modify k3s
-  shell: |
-    curl -sfL https://get.k3s.io | sh -
-    sudo chmod 644 /etc/rancher/k3s/k3s.yaml
-    mkdir -p ~/.kube/clusters
-    sed 's/127\.0\.0\.1/nas/g' /etc/rancher/k3s/k3s.yaml > ~/.kube/config
-    sed 's/127\.0\.0\.1/nas/g' /etc/rancher/k3s/k3s.yaml > ~/.kube/clusters/nas.k3s.config.yml
+---
+- include_tasks: 00-prerequirements.yml
+- include_tasks: 01-k3s.yml
 
 ### haproxy-ingress
 # TO BE REENABLED
@@ -35,66 +14,5 @@
 #       --set controller.stats.port=30000 \
 #       --set controller.daemonset.useHostPort=true
 
-### cert-manager.io
-- name: Install cmctl and cert-manager.io
-  shell: |
-    curl -sSL -o cmctl.tar.gz https://github.com/cert-manager/cert-manager/releases/download/$(curl --silent "https://api.github.com/repos/cert-manager/cert-manager/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/')/cmctl-linux-amd64.tar.gz
-    tar -xf cmctl.tar.gz
-    sudo mv cmctl /usr/local/bin
-    rm -rf cmctl.tar.gz
-    kubectl apply --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/$(curl --silent "https://api.github.com/repos/cert-manager/cert-manager/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/')/cert-manager.yaml
-
-- name: Template certManager-clusterIsser.yml
-  ansible.builtin.template:
-    src: certManager-clusterIsser.yml.j2
-    dest: /opt/monitoring/certManager-clusterIsser.yml
-
-# WAIT FOR CMCTL
-- name: Deploy certManager-clusterIsser.yml
-  become: true
-  retries: 24
-  delay: 5
-  register: result
-  until: result is succeeded
-  shell: |
-    kubectl apply -f ./certManager-clusterIsser.yml
-  args:
-    chdir: /opt/monitoring/
-
-- name: Template certManager-ingress.yml
-  ansible.builtin.template:
-    src: certManager-ingress.yml.j2
-    dest: /opt/monitoring/certManager-ingress.yml
-
-- name: Deploy certManager-ingress.yml
-  become: true
-  shell: |
-    kubectl apply -f ./certManager-ingress.yml
-  args:
-    chdir: /opt/monitoring/
-
-### Longhorn
-- name: Prepare Longhorn values.yml
-  ansible.builtin.template:
-    src: longhorn-values.yml.j2
-    dest: /opt/monitoring/longhorn-values.yml
-
-- name: Install Longhorn
-  shell: |
-    /home/linuxbrew/.linuxbrew/bin/helm repo add longhorn https://charts.longhorn.io
-    /home/linuxbrew/.linuxbrew/bin/helm repo update
-    /home/linuxbrew/.linuxbrew/bin/helm upgrade --install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --values longhorn-values.yml
-  args:
-    chdir: /opt/monitoring/
-
-- name: Template longhorn-ingress.yml
-  ansible.builtin.template:
-    src: longhorn-ingress.yml.j2
-    dest: /opt/monitoring/longhorn-ingress.yml
-
-- name: Deploy longhorn-ingress.yml
-  become: true
-  shell: |
-    kubectl apply -f ./longhorn-ingress.yml
-  args:
-    chdir: /opt/monitoring/
+- include_tasks: 02-cert-manager.yml
+- include_tasks: 03-longhorn.yml

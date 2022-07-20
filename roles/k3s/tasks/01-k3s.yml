@@ -1,0 +1,8 @@
+---
+- name: Install and modify k3s
+  shell: |
+    curl -sfL https://get.k3s.io | sh -
+    sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+    mkdir -p ~/.kube/clusters
+    sed 's/127\.0\.0\.1/nas/g' /etc/rancher/k3s/k3s.yaml > ~/.kube/config
+    sed 's/127\.0\.0\.1/nas/g' /etc/rancher/k3s/k3s.yaml > ~/.kube/clusters/nas.k3s.config.yml
