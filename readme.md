@@ -4,17 +4,20 @@ _Disclaimer: do this at your own risk. No fancy web gui here, just raw unix powe
 
 [![HPE ProLiant MicroServer Gen10](./img/microservergen10.jpeg)](./img/microservergen10.jpeg)
 
----
-
-## [Original project](https://github.com/aamkye/ubuntu_on_WD_PRx100)..
-
-.. was about setting up Ubuntu Server on WD PR4100. Some time passed, so LET'S upgrade!
+[Original project](https://github.com/aamkye/ubuntu_on_WD_PRx100) was about setting up Ubuntu Server on WD PR4100. Some time passed, so LET'S upgrade!
 
 ## Overview
 
 This tutorial covers how to install Ubuntu Server on HPE ProLiant MicroServer Gen10.
 
 It goes from preparation, downloading required packages, running installation, initial configuration and extras that most likely are intended to be used.
+
+---
+
+### But this time, lets monitor it like a pro!
+
+[![Grafana](./img/grafana.png)](./img/grafana.png)
+
 
 ---
 
