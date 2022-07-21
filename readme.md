@@ -16,7 +16,9 @@ It goes from preparation, downloading required packages, running installation, i
 
 ### But this time, lets monitor it like a pro!
 
-[![Grafana](./img/grafana.png)](./img/grafana.png)
+[![node](./img/node.png)](./img/node.png)
+[![smart](./img/smart.png)](./img/smart.png)
+[![zfs](./img/zfs.png)](./img/zfs.png)
 
 
 ---
