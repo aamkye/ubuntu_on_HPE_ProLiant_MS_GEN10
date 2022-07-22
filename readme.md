@@ -1,6 +1,6 @@
 # Setting up Ubuntu Server on HPE ProLiant MicroServer Gen10
 
-_Disclaimer: do this at your own risk. No fancy web gui here, just raw unix power._
+_Disclaimer: do this at your own risk. No fancy web gui here (except monitoring), just raw unix power._
 
 [![HPE ProLiant MicroServer Gen10](./img/microservergen10.jpeg)](./img/microservergen10.jpeg)
 
