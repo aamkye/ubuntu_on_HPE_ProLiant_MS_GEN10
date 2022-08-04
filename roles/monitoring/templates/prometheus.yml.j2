@@ -283,6 +283,7 @@ spec:
                 port:
                   number: 9090
   tls:
-    - secretName: prometheus-dc0-ak95-io-cert
+    - secretName: prometheus-dc0-ak95-io-cert-{% if prod_issuer | default("false") | bool %}prod{% else %}staging{% endif %}
+
       hosts:
         - prometheus.dc0.ak95.io

@@ -166,6 +166,7 @@ spec:
                 port:
                   number: 3000
   tls:
-    - secretName: grafana-dc0-ak95-io-cert
+    - secretName: grafana-dc0-ak95-io-cert-{% if prod_issuer | default("false") | bool %}prod{% else %}staging{% endif %}
+
       hosts:
         - grafana.dc0.ak95.io
