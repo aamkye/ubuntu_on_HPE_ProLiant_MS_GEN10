@@ -21,6 +21,6 @@ spec:
                   number: 9402
 
   tls:
-    - secretName: cert-manager-dc0-ak95-io-cert
+    - secretName: cert-manager-dc0-ak95-io-cert-{% if prod_issuer | default("false") | bool %}prod{% else %}staging{% endif %}
       hosts:
         - cert-manager.dc0.ak95.io

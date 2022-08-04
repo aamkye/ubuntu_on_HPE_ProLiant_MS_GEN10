@@ -21,6 +21,6 @@ spec:
                   number: 80
 
   tls:
-    - secretName: longhorn-dc0-ak95-io-cert
+    - secretName: longhorn-dc0-ak95-io-cert-{% if prod_issuer | default("false") | bool %}prod{% else %}staging{% endif %}
       hosts:
         - longhorn.dc0.ak95.io
