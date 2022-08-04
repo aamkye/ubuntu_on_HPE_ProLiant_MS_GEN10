@@ -5,5 +5,5 @@
 
 - name: "Prepare user-data"
   ansible.builtin.template:
-    src: user-data.j2
+    src: user-data.yml.j2
     dest: "{{ tmp_dir }}/user-data"
