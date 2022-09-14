@@ -1,3 +1,4 @@
+---
 - name: Ensure prometheus node exporter service is stopped
   service:
     name: prometheus-node-exporter

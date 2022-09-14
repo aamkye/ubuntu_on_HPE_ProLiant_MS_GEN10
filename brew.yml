@@ -1,3 +1,4 @@
+---
 - name: Install brew
   hosts: "{{ target | default('None') }}"
   vars_files:

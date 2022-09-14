@@ -1,3 +1,4 @@
+---
 - name: Setup ZFS
   hosts: "{{ target | default('None') }}"
   vars_files:

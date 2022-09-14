@@ -1,3 +1,4 @@
+---
 - name: Create alerts prometheus folder
   become: True
   file:

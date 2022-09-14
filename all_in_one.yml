@@ -1,3 +1,4 @@
+---
 - name: All in one playbook
   hosts: "{{ target | default('nas') }}"
   vars_files:

@@ -1,3 +1,4 @@
+---
 - name: Ensure dependencies are installed
   become: true
   ansible.builtin.package:

@@ -1,3 +1,4 @@
+---
 - name: Add netplan dns config
   become: true
   ansible.builtin.copy:

@@ -1,3 +1,4 @@
+---
 - name: Create rules prometheus folder
   become: True
   file:

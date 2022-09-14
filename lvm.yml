@@ -1,3 +1,4 @@
+---
 - name: Extend LVM
   hosts: "{{ target | default('None') }}"
   vars_files:

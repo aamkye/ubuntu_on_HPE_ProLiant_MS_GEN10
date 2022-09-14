@@ -1,3 +1,4 @@
+---
 - name: Check ZFS pool existance
   command: zfs list -Ho name {{ item['name'] }}
   register: result_dataset_list

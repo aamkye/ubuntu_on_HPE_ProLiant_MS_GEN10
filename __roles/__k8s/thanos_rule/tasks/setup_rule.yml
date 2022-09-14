@@ -1,3 +1,4 @@
+---
 - name: Create thanos rule folder
   become: True
   file:

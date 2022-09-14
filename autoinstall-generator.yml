@@ -1,3 +1,4 @@
+---
 - name: Setup autoinstall-generator
   hosts: localhost
   vars_files:

@@ -1,3 +1,4 @@
+---
 - name: Install k3s
   hosts: "{{ target | default('None') }}"
   vars_files:

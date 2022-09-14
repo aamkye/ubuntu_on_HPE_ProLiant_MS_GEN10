@@ -1,3 +1,4 @@
+---
 - name: Install monitoring
   hosts: "{{ target | default('None') }}"
   vars_files:

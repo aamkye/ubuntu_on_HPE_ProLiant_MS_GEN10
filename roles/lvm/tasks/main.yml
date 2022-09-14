@@ -1,3 +1,4 @@
+---
 - name: Extend an existing partition to fill all available space
   become: true
   community.general.parted:

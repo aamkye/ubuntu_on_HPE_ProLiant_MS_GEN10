@@ -1,3 +1,4 @@
+---
 - include_role:
     name: setup_prometheus_node_exporter
     tasks_from: remove_system_service

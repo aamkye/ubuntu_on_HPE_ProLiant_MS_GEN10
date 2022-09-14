@@ -1,3 +1,4 @@
+---
 - name: Setup unattended-upgrades
   hosts: "{{ target | default('None') }}"
   vars_files:

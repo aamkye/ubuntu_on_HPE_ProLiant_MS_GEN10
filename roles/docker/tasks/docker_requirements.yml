@@ -1,3 +1,4 @@
+---
 - name: Ensure old versions of Docker are not installed
   ansible.builtin.package:
     name: '{{ item }}'

@@ -1,3 +1,4 @@
+---
 - name: Create thanos store folders
   become: True
   file:

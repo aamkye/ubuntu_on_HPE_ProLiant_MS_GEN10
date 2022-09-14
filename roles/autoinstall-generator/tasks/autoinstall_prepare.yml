@@ -1,3 +1,4 @@
+---
 - name: "Prepare {{ tmp_dir }} folder"
   ansible.builtin.file:
     state: directory
